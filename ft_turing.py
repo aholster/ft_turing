@@ -1,7 +1,8 @@
 import sys
 import json
 
-from verify_turing_dict import verify_turing_dict
+from turing_verification import verify_turing_dict
+from turing_verification import verify_turing_transition_table
 
 def usage():
 	'''prints usage? '''
@@ -18,7 +19,6 @@ optional arguments:
 	sys.exit(1)
 
 
-
 def verify_json_machine(json_name):
 	'''verifies json turing machine is not mangled'''
 	try:
@@ -31,7 +31,10 @@ def verify_json_machine(json_name):
 		if (verify_turing_dict(turing_dict) == False):
 			print('error: json machine-structure mangled')
 			sys.exit(1)
-		
+		elif (verify_turing_transition_table(turing_dict) == False):
+			print('error: transition table invalid')
+			sys.exit(1)
+
 
 if (len(sys.argv) == 2):
 	if sys.argv[1] == '-h' or sys.argv[1] == '--help':
