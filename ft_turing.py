@@ -20,10 +20,22 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit''')
-    sys.exit(1)
 
 
-def verify_json_machine(json_name):
+def verify_input_tape(tdict, input_tape):
+    veracity = True
+    for char in input_tape:
+        if not char in tdict['alphabet']:
+            print(
+                f'Warning: input tape character {char} is not part of alphabet: {tdict["alphabet"]}')
+            veracity = False
+        if char in tdict['blank']:
+            print(f'Warning: input tape character {char} is BLANK character')
+            veracity = False
+    return veracity
+
+
+def verify_json_machine(json_name, input_str):
     '''verifies json turing machine is not mangled'''
     try:
         with open(sys.argv[1], "r") as file:
@@ -39,7 +51,10 @@ def verify_json_machine(json_name):
             if (verify_turing_transition_table(turing_dict) == False):
                 print('error: transition table invalid')
                 return False
-            run_turing(turing_dict)
+            if (verify_input_tape(turing_dict, input_str) == False):
+                print('error: input tape invalid')
+                return False
+            run_turing(turing_dict, input_str)
         except Exception as err:
             print(f'Error: {err}')
 
@@ -54,7 +69,7 @@ if __name__ == "__main__":
             print('error: not enough arguments')
             sys.exit(1)
     elif len(sys.argv) == 3:
-        if verify_json_machine(sys.argv[1]) == False:
+        if verify_json_machine(sys.argv[1], sys.argv[2]) == False:
             sys.exit(1)
     else:
         print('error: too many arguments')
