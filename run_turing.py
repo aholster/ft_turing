@@ -24,7 +24,7 @@ def run_turing(tmachine, tape):
             if instruction['read'] == tape[index]:
                 next_state = instruction
         if next_state == None:
-            print('FSM could not find viable state')
+            print(f'FSM could not find viable state from ({curr_state}, {tape[index]})')
             break
 
         tape = f'{tape[:index]}{next_state["write"]}{tape[index + 1:]}'
@@ -37,4 +37,4 @@ def run_turing(tmachine, tape):
 
         txt += f'({curr_state}, {tape[index]}, {next_state["action"]})'
         print(txt)
-    print(f'FSM reached acceptance state: {curr_state}')
+    print(f'FSM reached acceptance state: {curr_state}, tape is now:{tape}')
