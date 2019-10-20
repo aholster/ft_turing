@@ -5,6 +5,8 @@ import json
 from turing_verification import verify_turing_dict
 from turing_verification import verify_turing_transition_table
 
+from run_turing import run_turing
+
 
 def usage():
     '''prints usage? '''
@@ -28,14 +30,20 @@ def verify_json_machine(json_name):
             turing_dict = json.load(file)
     except:
         print('error: could not open file')
-        sys.exit(1)
+        return False
     else:
-        if (verify_turing_dict(turing_dict) == False):
-            print('error: json machine-structure mangled')
-            sys.exit(1)
-        elif (verify_turing_transition_table(turing_dict) == False):
-            print('error: transition table invalid')
-            sys.exit(1)
+        try:
+            if (verify_turing_dict(turing_dict) == False):
+                print('error: json machine-structure mangled')
+                return False
+            if (verify_turing_transition_table(turing_dict) == False):
+                print('error: transition table invalid')
+                return False
+            run_turing(turing_dict)
+        except Exception as err:
+            print(f'Error: {err}')
+
+    return True
 
 
 if __name__ == "__main__":
@@ -46,6 +54,10 @@ if __name__ == "__main__":
             print('error: not enough arguments')
             sys.exit(1)
     elif len(sys.argv) == 3:
-        verify_json_machine(sys.argv[1])
+        if verify_json_machine(sys.argv[1]) == False:
+            sys.exit(1)
     else:
         print('error: too many arguments')
+        sys.exit(1)
+
+    sys.exit(0)

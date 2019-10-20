@@ -7,41 +7,38 @@ def verify_turing_transition_table(ttbl):
             veracity = False
 
     ttransition_table = ttbl['transitions']
-    for state_handler in ttransition_table:
-        linecount = 0
+    for state_handler in ttransition_table.keys():
+        linen = 0
         if not state_handler in ttbl['states']:
-            print('Warning: Unlisted State Found: ', state_handler)
+            print('Warning: State not properly declared Found: ', state_handler)
             veracity = False
+        if type(ttransition_table[state_handler]) != list:
+                print(f'Warning: "{state_handler}" is not a list type')
+                veracity = False
+                continue
         for t_instructions in ttransition_table[state_handler]:
-            linecount += 1
-            if len(t_instructions) != 4:
-                print('Warning: wrong number of fields in', f'"{state_handler}"', 'at line', linecount)
+            linen += 1
+            if (type(t_instructions) != dict):
+                print(f'Warning: "{t_instructions}" is not a dict type, at line :{linen}')
                 veracity = False
-            def print_field_error(err_str, bad_entry):
-                nonlocal veracity
-                print(err_str, f'"{bad_entry}"', 'in', f'"{state_handler}"', 'at line', linecount)
-                veracity = False
-
-            if not 'read' in t_instructions:
-                print_field_error('Warning: missing field:', 'read')
-            elif not t_instructions['read'] in ttbl['alphabet']:
-                print_field_error('Warning: wrong character entry:', t_instructions['read'])
-
-            if not 'to_state' in t_instructions:
-                print_field_error('Warning: missing field:', 'to_state')
-            elif not t_instructions['to_state'] in ttbl['states']:
-                print_field_error('Warning: wrong state entry:', t_instructions['to_state'])
-
-            if not 'write' in t_instructions:
-                print_field_error('Warning: missing field:', 'write')
-            elif not t_instructions['write'] in ttbl['alphabet']:
-                print_field_error('Warning: wrong character entry:', t_instructions['write'])
-
+                continue
             val_actions = 'LEFT', 'RIGHT'
-            if not 'action' in t_instructions:
-                print_field_error('Warning: missing field:', 'action')
-            elif not t_instructions['action'] in val_actions:
-                print_field_error('Warning: wrong action entry:', t_instructions['action'])
+            expected_fields = {'read': ttbl['alphabet'],
+                               'to_state': ttbl['states'],
+                               'write':  ttbl['alphabet'],
+                               'action': val_actions}
+            if set(expected_fields) != set(t_instructions.keys()):
+                print(f'Warning: Bad Fields at "{state_handler}"')
+                veracity = False
+            for entry in expected_fields.keys():
+                if not entry in t_instructions.keys():
+                    print(
+                        f'Warning: Field "{entry}" not present in,"{state_handler}" at {linen}')
+                    veracity = False
+                elif not t_instructions[entry] in expected_fields[entry]:
+                    print(
+                        f'Warning: bad entry "{entry}": "{t_instructions[entry]}" unexpected value, line{linen}')
+                    veracity = False
     return (veracity)
 
 
@@ -50,15 +47,22 @@ def verify_turing_dict(tdict):
     also checks if said fields contain proper necesary items
     as defined in subject
     DOES NOT VERIFY TRANSITIONS '''
-    veracity = True
-    if (len(tdict) != 7):
-        print('Warning: numer of fields should be 7 but is:', len(tdict))
-        veracity = False
-    prereq_fields = 'name', 'alphabet', 'blank', 'states', 'initial', 'finals', 'transitions'
+    prereq_fields = {'name': str,
+                     'alphabet': list,
+                     'blank': str,
+                     'states': list,
+                     'initial': str,
+                     'finals': list,
+                     'transitions': dict}
+
+    if set(prereq_fields.keys()) != set(tdict.keys()):
+        print('Warning: incorrect keys in json')
+        return False
     for key in prereq_fields:
-        if not key in tdict:
-            print('Warning: Field missing:', key)
-            veracity = False
+        if type(tdict[key]) != prereq_fields[key]:
+            print(f'Warning: field is wrong type: "{key}" "{type(tdict[key])}"')
+            return False
+    veracity = True
     for token in tdict['alphabet']:
         if len(token) != 1:
             print('Warning: Alphabet Token Invalid:', token)
