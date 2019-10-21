@@ -23,15 +23,15 @@ optional arguments:
 
 
 def verify_input_tape(tdict, input_tape):
-	veracity = True
-	for char in input_tape:
-		if not char in tdict['alphabet']:
-			print(f'Warning: input tape character {char} is not part of alphabet: {tdict["alphabet"]}')
-			veracity = False
-		if char in tdict['blank']:
-			print(f'Warning: input tape character {char} is BLANK character')
-			veracity = False
-	return veracity
+    veracity = True
+    for char in input_tape:
+        if not char in tdict['alphabet']:
+            print(f'Warning: input tape character {char} is not part of alphabet: {tdict["alphabet"]}')
+            veracity = False
+        if char in tdict['blank']:
+            print(f'Warning: input tape character {char} is BLANK character')
+            veracity = False
+    return veracity
 
 def verify_json_machine(json_name, input_str):
     '''verifies json turing machine is not mangled'''
