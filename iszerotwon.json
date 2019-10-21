@@ -1,0 +1,39 @@
+{
+	"name"		: "iszerotwon",
+	"alphabet"	: [ "0", ".", "x", "n", "y"],
+	"blank"		: ".",
+	"states"	: [ "q1", "q2", "q3", "q4", "q5", "yes", "no"],
+	"initial"	: "q1",
+	"finals"	: ["no", "yes"],
+
+	"transitions" : {
+		"q1": [
+			{ "read" : "0", "to_state": "q2", "write": ".", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "no", "write": "n", "action": "LEFT"}
+		],
+
+		"q2": [
+			{ "read" : "0", "to_state": "q3", "write": "x", "action": "RIGHT"},
+			{ "read" : "x", "to_state": "q2", "write": "x", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "yes", "write": "y", "action": "LEFT"}
+		],
+
+		"q3": [
+			{ "read" : "x", "to_state": "q3", "write": "x", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "q5", "write": ".", "action": "LEFT"},
+			{ "read" : "0", "to_state": "q4", "write": "0", "action": "RIGHT"}
+		],
+
+		"q4": [
+			{ "read" : "x", "to_state": "q4", "write": "x", "action": "RIGHT"},
+			{ "read" : "0", "to_state": "q3", "write": "x", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "no", "write": "n", "action": "LEFT"}
+		],
+
+		"q5": [
+			{ "read" : "0", "to_state": "q5", "write": "0", "action": "LEFT"},
+			{ "read" : "x", "to_state": "q5", "write": "x", "action": "LEFT"},
+			{ "read" : ".", "to_state": "q2", "write": ".", "action": "RIGHT"}
+		]
+	}
+}
