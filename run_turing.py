@@ -22,7 +22,7 @@ def run_turing(tmachine, tape):
 
     def turing_machine_loop(turing_table, tmachine):
         '''handles transition table looping
-		
+        
         move_head handles movement of turing machine head, and memory tape expansion'''
         def move_head(direction,  blank):
             '''handles moving head or expanding tape'''
@@ -55,25 +55,24 @@ def run_turing(tmachine, tape):
             txt = f'[{tape[:index]}<{tape[index]}>{tape[index + 1:]}{b}{b}{b}]\t'
             txt += f'({curr_state}, {tape[index]}) -> '
 
-            cur_instruct = None
             for instruction in turing_table[curr_state]:
                 if instruction['read'] == tape[index]:
-                    cur_instruct = instruction
-            if cur_instruct == None:
+                    # if tape[index] != instruction['write']:
+                    #     real_writes += 1
+                    tape = f'{tape[:index]}{instruction["write"]}{tape[index + 1:]}'
+
+                    txt += f'({instruction["to_state"]}, {tape[index]}, {instruction["action"]})'
+    
+                    if not instruction['to_state'] in tmachine['finals']:
+                            move_head(instruction['action'], tmachine['blank'])
+
+                    print(txt)
+                    curr_state = instruction['to_state']
+                    total_steps += 1
+                    break
+            else:
                 raise TransitionError(f'amachine could not find viable state from ({curr_state}, {tape[index]})')
 
-            # if tape[index] != cur_instruct['write']:
-            #     real_writes += 1
-            tape = f'{tape[:index]}{cur_instruct["write"]}{tape[index + 1:]}'
-
-            txt += f'({cur_instruct["to_state"]}, {tape[index]}, {cur_instruct["action"]})'
-    
-            if not cur_instruct['to_state'] in tmachine['finals']:
-                move_head(cur_instruct['action'], tmachine['blank'])
-
-            print(txt)
-            curr_state = cur_instruct['to_state']
-            total_steps += 1
 
 
     write_intro(tmachine, tmachine['transitions'])
