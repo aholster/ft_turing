@@ -9,7 +9,7 @@ from run_turing import run_turing
 
 
 def usage():
-    '''prints usage? '''
+    '''prints usage.'''
     print('''usage: ft_turing [-h] jsonfile input
 
 positional arguments:
@@ -23,6 +23,7 @@ optional arguments:
 
 
 def verify_input_tape(tdict, input_tape):
+    '''verifies that input tape is playing fair'''
     veracity = True
     for char in input_tape:
         if not char in tdict['alphabet']:
@@ -34,7 +35,7 @@ def verify_input_tape(tdict, input_tape):
     return veracity
 
 def verify_json_machine(json_name, input_str):
-    '''verifies json turing machine is not mangled'''
+    '''verifies that .json contains a readable and complete turing machine description'''
     try:
         with open(sys.argv[1], "r") as file:
             turing_dict = json.load(file)
@@ -58,8 +59,8 @@ def verify_json_machine(json_name, input_str):
 
     return True
 
-
-if __name__ == "__main__":
+def main():
+    '''main of ft_turing directs program steps/flow and contains basic argument parsing'''
     if len(sys.argv) == 2:
         if sys.argv[1] == '-h' or sys.argv[1] == '--help':
             usage()
@@ -74,3 +75,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()
