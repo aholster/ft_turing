@@ -2,7 +2,7 @@
 	"name"		: "unary_add",
 	"alphabet"	: [ "1", ".", "+", "=" ],
 	"blank"		: ".",
-	"states"	: [ "scanright", "pickup", "addone", "skip", "HALT" ],
+	"states"	: [ "scanright", "pickup", "HALT" ],
 	"initial"	: "scanright",
 	"finals"	: [ "HALT" ],
 
@@ -15,19 +15,9 @@
 		],
 
 		"pickup": [
-			{ "read" : "1", "to_state": "skip", "write": "+", "action": "LEFT"},
+			{ "read" : "1", "to_state": "pickup", "write": "+", "action": "LEFT"},
 			{ "read" : "=", "to_state": "HALT", "write": ".", "action": "LEFT"},
-			{ "read" : ".", "to_state": "pickup", "write": ".", "action": "RIGHT"}
-		],
-
-		"addone": [
-			{ "read" : ".", "to_state": "scanright"  , "write": "1", "action": "RIGHT"}
-		],
-
-		"skip": [
-			{ "read" : ".", "to_state": "skip"     , "write": ".", "action": "LEFT"},
-			{ "read" : "1", "to_state": "addone", "write": "1", "action": "RIGHT"}
+			{ "read" : ".", "to_state": "scanright", "write": "1", "action": "RIGHT"}
 		]
-
 	}
 }
