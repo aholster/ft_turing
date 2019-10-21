@@ -1,0 +1,29 @@
+{
+	"name"		: "iszernonen",
+	"alphabet"	: [ "0", "1", ".", "n", "y" ],
+	"blank"		: ".",
+	"states"	: [ "expect_zero", "expect_one", "wrong", "correct", "HALT" ],
+	"initial"	: "expect_zero",
+	"finals"	: [ "HALT" ],
+
+	"transitions" : {
+		"expect_zero": [
+			{ "read" : "0", "to_state": "expect_zero", "write": ".", "action": "RIGHT"},
+			{ "read" : "1", "to_state": "expect_zero", "write": "1", "action": "RIGHT"},
+			{ "read" : "+", "to_state": "pickup", "write": ".", "action": "RIGHT"},
+			{ "read" : "=", "to_state": "HALT" , "write": ".", "action": "LEFT" }
+		],
+
+		"expect_one": [
+
+		],
+
+		"wrong": [
+
+		],
+
+		"correct": [
+
+		]
+	}
+}

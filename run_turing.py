@@ -16,11 +16,11 @@ def run_turing(tmachine, tape):
         nonlocal tape
         nonlocal inf_left
         if direction == "RIGHT":
-            if index < len(tape):
+            if index + 1 < len(tape):
                 index += 1
             else:
-                index += 1
                 tape = f'{tape}{blank}'
+                index += 1
         else:
             if index != 0:
                 index -= 1
@@ -36,33 +36,36 @@ def run_turing(tmachine, tape):
     turing_table = tmachine['transitions']
     write_intro(tmachine, turing_table)
     curr_state = tmachine['initial']
+    b = tmachine["blank"]
+    if len(tape) == 0:
+        tape = f'{b}'
     index = 0
     inf_left = False
     real_writes = 0
     total_steps = 0
     while not curr_state in tmachine['finals']:
-        txt = f'[{tape[:index]}<{tape[index]}>{tape[index + 1:]}]\t'
+        txt = f'[{tape[:index]}<{tape[index]}>{tape[index + 1:]}{b}{b}{b}]\t'
         txt += f'({curr_state}, {tape[index]}) -> '
 
-        next_state = None
+        cur_instruct = None
         for instruction in turing_table[curr_state]:
             if instruction['read'] == tape[index]:
-                next_state = instruction
-        if next_state == None:
+                cur_instruct = instruction
+        if cur_instruct == None:
             print(f'amachine could not find viable state from ({curr_state}, {tape[index]})')
             break
 
-        if tape[index] != next_state['write']:
+        if tape[index] != cur_instruct['write']:
             real_writes += 1
-        tape = f'{tape[:index]}{next_state["write"]}{tape[index + 1:]}'
+        tape = f'{tape[:index]}{cur_instruct["write"]}{tape[index + 1:]}'
 
-        if not next_state['to_state'] in tmachine['finals']:
-            if move_head(next_state['action'], tmachine['blank']) == False:
+        if not cur_instruct['to_state'] in tmachine['finals']:
+            if move_head(cur_instruct['action'], tmachine['blank']) == False:
                 break
 
-        curr_state = next_state['to_state']
-        txt += f'({curr_state}, {tape[index]}, {next_state["action"]})'
+        txt += f'({cur_instruct["to_state"]}, {tape[index]}, {cur_instruct["action"]})'
         print(txt)
+        curr_state = cur_instruct['to_state']
         total_steps += 1
 
     if curr_state in tmachine['finals']:
