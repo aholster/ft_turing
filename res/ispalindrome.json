@@ -1,0 +1,60 @@
+{
+	"name"		: "is_palindrome",
+	"alphabet"	: [ "a", "b", ".", "_", "n", "y" ],
+	"blank"		: ".",
+	"states"	: [ "identify", "lane_a", "lane_b", "tail_a", "tail_b", "rev_lanes", "yes", "no", "HALT"],
+	"initial"	: "identify",
+	"finals"	: [ "HALT" ],
+
+	"transitions" : {
+		"identify": [
+			{ "read" : ".", "to_state": "no", "write": "n", "action": "RIGHT"},
+			{ "read" : "a", "to_state": "lane_a", "write": "_", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "lane_b", "write": "_", "action": "RIGHT"}
+		],
+
+		"lane_a": [
+			{ "read" : "a", "to_state": "lane_a", "write": "a", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "lane_a", "write": "b", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "tail_a", "write": ".", "action": "LEFT"},
+			{ "read" : "_", "to_state": "tail_a", "write": "_", "action": "LEFT"}
+		],
+
+		"lane_b": [
+			{ "read" : "a", "to_state": "lane_b", "write": "a", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "lane_b", "write": "b", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "tail_b", "write": ".", "action": "LEFT"},
+			{ "read" : "_", "to_state": "tail_b", "write": "_", "action": "LEFT"}
+		],
+
+		"tail_a": [
+			{ "read" : "a", "to_state": "rev_lanes", "write": "_", "action": "LEFT"},
+			{ "read" : "b", "to_state": "no", "write": "n", "action": "RIGHT"},
+			{ "read" : "_", "to_state": "yes", "write": "_", "action": "RIGHT"}
+		],
+
+		"tail_b": [
+			{ "read" : "b", "to_state": "rev_lanes", "write": "_", "action": "LEFT"},
+			{ "read" : "a", "to_state": "no", "write": "n", "action": "RIGHT"},
+			{ "read" : "_", "to_state": "yes", "write": "_", "action": "RIGHT"}
+		],
+
+		"rev_lanes": [
+			{ "read" : "a", "to_state": "rev_lanes", "write": "a", "action": "LEFT"},
+			{ "read" : "b", "to_state": "rev_lanes", "write": "b", "action": "RIGHT"},
+			{ "read" : "_", "to_state": "identify", "write": "_", "action": "RIGHT"}
+		],
+
+
+		"yes": [
+			{ "read" : "_", "to_state": "yes", "write": "_", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "HALT", "write": "y", "action": "LEFT"}
+		],
+
+		"no": [
+			{ "read" : "_", "to_state": "no", "write": "_", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "HALT", "write": "n", "action": "LEFT"}
+		]
+
+	}
+}

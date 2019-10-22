@@ -1,0 +1,46 @@
+{
+	"name"		: "is_palindrome",
+	"alphabet"	: [ "a", "b", ".", "n", "y" ],
+	"blank"		: ".",
+	"states"	: [ "identify", "a_lane", "a_tail", "rev_lane", "b_lane", "b_tail", "HALT"],
+	"initial"	: "identify",
+	"finals"	: [ "HALT" ],
+
+	"transitions" : {
+		"identify": [
+			{ "read" : ".", "to_state": "HALT", "write": "y", "action": "RIGHT"},
+			{ "read" : "a", "to_state": "a_lane", "write": ".", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "b_lane", "write": ".", "action": "RIGHT"}
+		],
+
+		"a_lane": [
+			{ "read" : ".", "to_state": "a_tail", "write": ".", "action": "LEFT"},
+			{ "read" : "a", "to_state": "a_lane", "write": "a", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "a_lane", "write": "b", "action": "RIGHT"}
+		],
+
+		"a_tail": [
+			{ "read" : ".", "to_state": "HALT", "write": "y", "action": "RIGHT"},
+			{ "read" : "a", "to_state": "rev_lane", "write": ".", "action": "LEFT"},
+			{ "read" : "b", "to_state": "HALT", "write": "n", "action": "RIGHT"}
+		],
+
+		"rev_lane": [
+			{ "read" : ".", "to_state": "identify", "write": ".", "action": "RIGHT"},
+			{ "read" : "a", "to_state": "rev_lane", "write": "a", "action": "LEFT"},
+			{ "read" : "b", "to_state": "rev_lane", "write": "b", "action": "LEFT"}
+		],
+
+		"b_lane": [
+			{ "read" : ".", "to_state": "b_tail", "write": ".", "action": "LEFT"},
+			{ "read" : "a", "to_state": "b_lane", "write": "a", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "b_lane", "write": "b", "action": "RIGHT"}
+		],
+
+		"b_tail": [
+			{ "read" : ".", "to_state": "HALT", "write": "y", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "rev_lane", "write": ".", "action": "LEFT"},
+			{ "read" : "a", "to_state": "HALT", "write": "n", "action": "RIGHT"}
+		]
+	}
+}
