@@ -84,9 +84,24 @@ def run_turing(tmachine, tape):
         turing_machine_loop(tmachine['transitions'], tmachine)
     except TransitionError as transerr:
         print(f'Error: {transerr}')
+    finally:
+        print('******************************************')
 
     if curr_state in tmachine['finals']:
         print(f'amachine reached acceptance state: "{curr_state}", tape is now:[{tape}]')
     else:
         print(f'amachine had its process interrupted in state: "{curr_state}", tape is now:[{tape}]')
-    print(f'Total amount of steps: {total_steps}, initial tape len {tape_len}')
+
+    import math
+    print(f'''
+Total amount of steps: {total_steps}, initial tape len {tape_len}
+
+| for this tape, O is ({total_steps}), N is ({tape_len})
+| aprox time complexity is (n * {total_steps / tape_len})
+|	linear O(n) ({tape_len})
+|	linearithmetic O(n log n) ({tape_len * math.log10(tape_len)})
+|	quadratic O(n^2) ({tape_len ** 2})
+|	factorial O(n!) ({math.factorial(tape_len)})
+| the closest of shown values might be the real one
+| (ignoring constant time or constant factors (ie: fractional power or polynomial))''')
+

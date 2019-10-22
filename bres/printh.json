@@ -1,0 +1,15 @@
+{
+	"name"		: "printh",
+	"alphabet"	: [ "0", "h", "."],
+	"blank"		: ".",
+	"states"	: [ "print?", "HALT" ],
+	"initial"	: "print?",
+	"finals"	: [ "HALT" ],
+
+	"transitions" : {
+		"print?": [
+			{ "read" : "0", "to_state": "HALT", "write": "h", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "HALT", "write": ".", "action": "LEFT"}
+		]
+	}
+}
