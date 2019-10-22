@@ -8,7 +8,8 @@
 
 	"transitions" : {
 		"identify": [
-			{ "read" : ".", "to_state": "no", "write": "n", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "no", "write": ".", "action": "RIGHT"},
+			{ "read" : "_", "to_state": "yes", "write": "_", "action": "RIGHT"},
 			{ "read" : "a", "to_state": "lane_a", "write": "_", "action": "RIGHT"},
 			{ "read" : "b", "to_state": "lane_b", "write": "_", "action": "RIGHT"}
 		],
@@ -41,10 +42,9 @@
 
 		"rev_lanes": [
 			{ "read" : "a", "to_state": "rev_lanes", "write": "a", "action": "LEFT"},
-			{ "read" : "b", "to_state": "rev_lanes", "write": "b", "action": "RIGHT"},
+			{ "read" : "b", "to_state": "rev_lanes", "write": "b", "action": "LEFT"},
 			{ "read" : "_", "to_state": "identify", "write": "_", "action": "RIGHT"}
 		],
-
 
 		"yes": [
 			{ "read" : "_", "to_state": "yes", "write": "_", "action": "RIGHT"},
