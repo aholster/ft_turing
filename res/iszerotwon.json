@@ -2,14 +2,19 @@
 	"name"		: "iszerotwon",
 	"alphabet"	: [ "0", ".", "x", "n", "y"],
 	"blank"		: ".",
-	"states"	: [ "q1", "q2", "q3", "q4", "q5", "yes", "no"],
+	"states"	: [ "q1", "q2", "q3", "q4", "q5", "q6", "yes", "no"],
 	"initial"	: "q1",
 	"finals"	: ["no", "yes"],
 
 	"transitions" : {
 		"q1": [
-			{ "read" : "0", "to_state": "q2", "write": ".", "action": "RIGHT"},
+			{ "read" : "0", "to_state": "q6", "write": ".", "action": "RIGHT"},
 			{ "read" : ".", "to_state": "no", "write": "n", "action": "LEFT"}
+		],
+
+		"q6": [
+			{ "read" : "0", "to_state": "q3", "write": "x", "action": "RIGHT"},
+			{ "read" : ".", "to_state": "no", "write": "n", "action": "RIGHT"}
 		],
 
 		"q2": [

@@ -48,7 +48,6 @@ def run_turing(tmachine, tape):
         nonlocal curr_state
         nonlocal total_steps
         nonlocal tape
-        # nonlocal real_writes
         b = tmachine["blank"]
         index = 0
         while not curr_state in tmachine['finals']:
@@ -57,8 +56,6 @@ def run_turing(tmachine, tape):
 
             for instruction in turing_table[curr_state]:
                 if instruction['read'] == tape[index]:
-                    # if tape[index] != instruction['write']:
-                    #     real_writes += 1
                     tape = f'{tape[:index]}{instruction["write"]}{tape[index + 1:]}'
 
                     txt += f'({instruction["to_state"]}, {tape[index]}, {instruction["action"]})'
@@ -82,7 +79,6 @@ def run_turing(tmachine, tape):
     tape_len = len(tape)
     inf_left = False
     total_steps = 0
-    # real_writes = 0
 
     try:
         turing_machine_loop(tmachine['transitions'], tmachine)
@@ -94,4 +90,3 @@ def run_turing(tmachine, tape):
     else:
         print(f'amachine had its process interrupted in state: "{curr_state}", tape is now:[{tape}]')
     print(f'Total amount of steps: {total_steps}, initial tape len {tape_len}')
-    # print(f'real writing actions: {real_writes}')
